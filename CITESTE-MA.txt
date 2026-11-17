@@ -1,0 +1,125 @@
+IMAGINE SUNET ’89 · MARTORUL ANONIM
+Curs HTML · SCORM 2004 (3rd Edition) · v0.8 · 17.11.2026
+E-learning realizat de LEETUCATION SRL
+
+Cursul pornește cu animația „Finanțat de Municipiul Timișoara prin Centrul de Proiecte”, are voce în română
+(elementele apar pe măsură ce vorbește vocea, cu subtitrare) și se încheie cu pagina „Parteneri”, cu toate logourile.
+De pe „Parteneri”, un buton mare deschide „Rezultatele atelierului 2026”: poveștile elevilor și fotografiile din atelier.
+Merge pe calculator, pe tabletă și pe telefon (vezi 0).
+
+
+CE E ÎN PACHET
+  index.html ............ cursul
+  manifest.webmanifest .. pentru „Adaugă pe ecranul principal” (telefonul îl deschide ca aplicație, pe tot ecranul)
+  imsmanifest.xml ....... descrierea SCORM 2004 3rd Edition (+ fișierele .xsd și .dtd cerute de standard)
+  js/config.js .......... setările: numele fișierelor video și PDF, cele patru cadre, variabilele, modulele
+  js/slides.js .......... cele 27 de ecrane (textele, ramificarea, regulile de pe fiecare ecran)
+  js/rezultate.js ....... poveștile elevilor (ca text) și lista fotografiilor, pentru ecranul 5.6
+  js/player.js .......... player-ul (navigare, voce, straturi, salvare, export .doc, printare)
+  js/scorm_api.js ....... legătura cu LMS-ul
+  audio/ ................ vocea (36 de fișiere MP3) și audio/vo.js (textele vocii, subtitrarea, momentele de apariție)
+  media/brand/ .......... logourile: animația Centrului de Proiecte, Imagine Sunet ’89 (și varianta Manifest), Tehnoarte
+  media/cadre/ .......... cele patru cadre
+  media/docs/ ........... invitația (PDF)
+  media/rezultate/ ...... fotografiile din atelier (7 mari + 7 mici, fără metadate)
+  media/video/ .......... gol: aici vin clipurile opționale
+  css/, fonts/ .......... aspectul și fonturile locale (IBM Plex Sans, IBM Plex Serif, Doto; licență OFL, în fonts/);
+                          css/phone.css = așezarea pe telefon
+
+
+0. PE TELEFON ȘI PE TABLETĂ
+   - Pe calculator, cursul arată ca un ecran de 1920 × 1080, mărit sau micșorat după fereastră. Pe telefon (și pe
+     tableta ținută în picioare), ecranele trec singure pe o coloană care se derulează în sus și în jos, cu textul
+     la mărime de citit. Ținut culcat, telefonul așază unele liste pe două coloane.
+   - Jos e bara de control: Cuprins, vocea, subtitrarea, ecran complet, Înapoi, Înainte.
+   - Ecran complet: pe telefon, cursul trece pe tot ecranul la prima atingere (browserele nu permit asta la
+     deschidere, fără o atingere). Butonul cu cele patru colțuri din bară îl pornește și îl oprește (și pe calculator).
+   - iPhone: Safari nu permite ecran complet pentru pagini, așa că butonul nu apare. Cursul găzduit (GitHub, AWS) se
+     poate adăuga pe ecranul principal: butonul de partajare, apoi „Adaugă pe ecranul principal”. Se deschide apoi ca
+     o aplicație, pe tot ecranul (Cuprinsul explică pașii pe iPhone). Pe Android, Chrome oferă „Instalează aplicația”
+     sau „Adaugă pe ecranul de pornire”. Pe iPhone, aplicația de pe ecranul principal are răspunsurile ei, separat de Safari.
+   - Într-un LMS, cursul se așază după fereastra în care îl deschide platforma; ecranul complet apare doar dacă
+     platforma îl permite.
+
+1. PE PC, FĂRĂ INTERNET
+   Dezarhivează tot fișierul .zip într-un folder, apoi deschide index.html (dublu clic).
+   Merge în Chrome, Edge, Firefox și Safari actuale. Fără LMS, răspunsurile rămân doar în browserul de pe acel calculator.
+   Pe un calculator folosit de mai mulți elevi: după ce elevul descarcă povestea,
+   Cuprins > „Șterge răspunsurile de pe acest dispozitiv”.
+
+2. ÎN LMS (Moodle, Oracle Learning, SCORM Cloud etc.)
+   Încarci fișierul .zip așa cum e (manifestul e în rădăcina arhivei), ca SCORM 2004 3rd Edition.
+   Ce trimite cursul: cmi.completion_status = completed când elevul apasă „Am terminat” (5.3),
+   cmi.progress_measure, cmi.location (ecranul curent), cmi.suspend_data (alegerile, planul și povestea, pentru reluare),
+   cmi.session_time, cmi.exit = suspend (elevul poate reveni să-și descarce povestea).
+   Nu trimite scor și nu trimite textele elevilor ca interacțiuni.
+   De ce SCORM 2004: povestea poate avea până la 10.000 de caractere; în SCORM 1.2 datele de reluare au doar 4.096.
+
+3. PE GITHUB PAGES (actualizare: Add file > Upload files, tragi tot în afară de folderul audio, Commit changes;
+   fișierele cu același nume se înlocuiesc, iar site-ul se republică singur în cam un minut)
+   a) Creezi un repository (de ex. is89-martorul-anonim). Pe planul gratuit, site-ul GitHub Pages e public.
+   b) Încarci conținutul dezarhivat, cu index.html în rădăcină (Add file > Upload files sau git push).
+   c) Settings > Pages > Build and deployment > Source: Deploy from a branch > main, /(root) > Save.
+   d) Adresa apare în câteva minute: https://<utilizator>.github.io/is89-martorul-anonim/
+   Limite GitHub Pages: fișiere de cel mult 100 MB, site de cel mult 1 GB.
+
+4. PE AWS (S3 + CloudFront)
+   a) Creezi un bucket S3 (acces public blocat) și încarci conținutul dezarhivat:
+      aws s3 sync ./IS89_MartorulAnonim s3://<bucket>/
+      (comanda setează singură tipul fiecărui fișier: .js, .mp3, .woff2, .vtt)
+   b) Creezi o distribuție CloudFront cu bucket-ul ca origine (Origin Access Control), Default root object = index.html.
+      Adresa CloudFront e HTTPS.
+
+   ATENȚIE la 3 și 4: un curs găzduit pe alt domeniu decât LMS-ul nu poate raporta în LMS (browserul blochează
+   legătura SCORM între domenii). Pentru urmărire, încarcă pachetul .zip în LMS. Linkul de pe GitHub sau AWS e pentru
+   acces liber, fără urmărire; acolo răspunsurile rămân în browserul elevului.
+
+5. VIDEO-URILE ȘI LINKURILE
+   - 2.2 · Cum construiești o poveste: două lecții de pe web, care se deschid într-o filă nouă (js/config.js, la „media”):
+     web22a = lecția „Story structure” din Pixar in a Box, pe Khan Academy (coloana poveștii, tema, actele 1–3);
+     web22b = TED-Ed „Slowing down time (in writing & film)”, pe YouTube (ritmul, ca la încetinitor).
+   - 2.5 · Pixar: web1, web2, web3 = linkurile YouTube din invitație. Butonul „Urmărește pe YouTube” deschide
+     videoclipul într-o filă nouă; merge și de pe PC (file://), și găzduit (GitHub, AWS, LMS).
+   - 2.1 · invitatiePdf = media/docs/IS89_Invitatia.pdf, cu butonul „Deschide invitația (PDF)”.
+   - Clipurile opționale (butonul apare doar când există fișierul): pui fișierul în media/video/ și scrii calea lui
+     la clip1 (1.3), clip2 (2.3, la „Ritm”), clip3 (3.1), clip4 (3.2), clip5 („Coloana poveștii”, pe 4.9 și 5.1);
+     clipNVtt pentru subtitrare.
+   După modificare, refaci arhiva .zip cu index.html și imsmanifest.xml în rădăcină.
+
+6. TEXTELE ȘI VOCEA
+   - Textele de pe ecran sunt în js/slides.js: cauți fraza și o schimbi.
+   - Vocea e generată cu inteligență artificială în Magnific (ElevenLabs v4, vocea „Alexandra Stoica”, aceeași ca în
+     celelalte ateliere): 5 blocuri, tăiate pe cele 36 de ecrane și straturi și sincronizate cu textul (audio/vo.js).
+     Dacă schimbi un text pe care îl citește vocea, regenerezi în Magnific ecranul acela (aceeași voce, model
+     ElevenLabs v4, indicația [warm, clear voice] la început) și refaci fișierul audio al ecranului (de ex. 4-3.mp3)
+     și audio/vo.js.
+   - Elevul poate opri vocea, o poate relua, o poate grăbi (1,25× / 1,5×) și poate porni sau opri subtitrarea (CC).
+     La prima vizită, elementele apar pe voce; la revenire, ecranul apare întreg.
+
+7. REZULTATELE ATELIERULUI (ecranul 5.6)
+   - Se deschide din butonul mare de pe 5.5 sau din Cuprins. Nu intră în progresul cursului.
+   - Stânga: cele 26 de povești. Întâi cele semnate, după nume (numele scris de elev în document sau în numele
+     fișierului), apoi cele fără semnătură, cu titlul și primul rând. Clic pe o poveste: se citește în curs, cu
+     „Povestea anterioară” / „Povestea următoare”. Poveștile citite primesc semnul „citită”.
+   - Dreapta: fotografiile din atelier, ca o foaie de contact. Clic: fotografia mare, cu săgeți (și tastele ← →).
+   - Poveștile sunt în pachet ca text, nu ca fișiere Word: se încarcă repede (127 KB, doar când se deschide 5.6)
+     și nu duc mai departe proprietățile fișierelor (conturi, adrese de e-mail). Textul elevilor e cel original;
+     s-au schimbat doar ş/ţ cu sedilă în ș/ț și s-au scos rândurile tehnice rămase din formulare.
+   - Numele: dacă nu aveți acordul elevilor (sau al părinților) pentru publicarea numelor, în js/config.js puneți
+     rezultate: { …, arataNumele: false }. Poveștile rămân, fără nume.
+   - Altă poveste sau altă fotografie: js/rezultate.js și media/rezultate/ se refac din documentele primite, cu
+     scriptul build_rezultate.py din sursele proiectului (nu e în pachet). Fișierele noi se adaugă apoi în
+     imsmanifest.xml și se reface arhiva.
+
+8. CE S-A TESTAT (16.11.2026)
+   - Chrome: 155 de verificări automate — cele trei drumuri prin întrebări (sintagmă, fotografie, amândouă) și Înapoi pe
+     fiecare, blocările de pe 2.3 și 3.1, mesajele de pe 4.1–4.9 și 5.1, contorul de cuvinte și limita de 1000,
+     descărcarea .doc și printarea, finalizarea și ieșirea într-un LMS simulat strict (SCORM 2004), reluarea,
+     ștergerea datelor, vocea (apariția pe cue-uri, subtitrare, pauză, viteză), sunetul blocat de browser,
+     deschiderea directă de pe PC (file://), rezultatele atelierului (lista, cititorul, fotografiile, tastatura,
+     ascunderea numelor, fișierul de date lipsă), telefonul în picioare și culcat (toate cele 27 de ecrane încap
+     pe lățime, textul de cel puțin 12 px, câmpurile de 16 px, bara, ferestrele, cititorul, ecranul complet la
+     prima atingere și din buton), tableta (așezarea nu se schimbă când apare tastatura), iPhone fără ecran complet.
+   - axe-core, WCAG 2.2 AA: 0 probleme pe 27 de ecrane și ferestre pe calculator și pe 33 pe telefon.
+   - Încă netestat: Edge, Firefox și Safari reale, telefoane și tablete reale (în special iPhone), cititoare de
+     ecran, LMS-ul vostru.
