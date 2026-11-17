@@ -1,0 +1,1 @@
+Aici pui video-urile (MP4 H.264/AAC, 1080p) și subtitrările .vtt, apoi scrii calea în js/config.js, la „media”.
